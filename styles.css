@@ -95,3 +95,9 @@
 .theme-toggle{display:grid;place-items:center;flex:none;width:30px;height:30px;padding:0;border:1px solid #e5e5dc;border-radius:50%;background:#faf9f5;color:#65766d;font-size:17px;line-height:1;transition:background .15s,color .15s}
 .theme-toggle:hover{background:#eef2ec}
 @media (max-width:540px){.top-actions{gap:8px}.theme-toggle{width:28px;height:28px}}
+.player-row{grid-template-columns:minmax(0,1fr) auto 21px}
+.player-name{font-size:12px;font-weight:700}
+.board-player{gap:0}
+.board-player span:last-child{font-size:12px;font-weight:800;color:#34483a}
+.standing-person{display:block}
+.standing-person b{font-size:12px;font-weight:800;color:#34483a}

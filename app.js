@@ -43,7 +43,6 @@
     return String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
   }
   function playerById(id) { return state.players.find((player) => player.id === id); }
-  function initials(name) { return name.trim().split(/\s+/).slice(0, 2).map((part) => part[0] || '').join('').toUpperCase(); }
   function roundLabel(index) { return `Round ${index + 1}`; }
   function currentTournament() { return state.tournament; }
   function isRoundLocked(index) { return Boolean(currentTournament()?.lockedRounds?.includes(index)); }
@@ -133,7 +132,7 @@
       updateRoundPreview();
       return;
     }
-    els.playerList.innerHTML = players.map((player) => `<div class="player-row"><span class="player-avatar">${escapeHTML(initials(player.name))}</span><span class="player-name" title="${escapeHTML(player.name)}">${escapeHTML(player.name)}</span><span class="player-rating">${player.rating}</span><button class="remove-player" type="button" data-remove="${escapeHTML(player.id)}" title="Remove ${escapeHTML(player.name)}" aria-label="Remove ${escapeHTML(player.name)}">×</button></div>`).join('');
+    els.playerList.innerHTML = players.map((player) => `<div class="player-row"><span class="player-name" title="${escapeHTML(player.name)}">${escapeHTML(player.name)}</span><span class="player-rating">${player.rating}</span><button class="remove-player" type="button" data-remove="${escapeHTML(player.id)}" title="Remove ${escapeHTML(player.name)}" aria-label="Remove ${escapeHTML(player.name)}">×</button></div>`).join('');
     updateRoundPreview();
   }
 
@@ -452,12 +451,12 @@
       if (pair.bye) {
         entered++;
         const player = playerById(pair.bye);
-        return `<tr class="bye-row"><td class="board-num">BYE</td><td colspan="3"><div class="board-player"><span class="player-avatar">${escapeHTML(initials(player.name))}</span><span>${escapeHTML(player.name)}<small>${player.rating || 'UNRATED'}</small></span></div></td><td><span class="bye-label">1 POINT</span></td></tr>`;
+        return `<tr class="bye-row"><td class="board-num">BYE</td><td colspan="2"><div class="board-player"><span class="board-player-name">${escapeHTML(player.name)}<small>${player.rating || 'UNRATED'}</small></span></div></td><td><span class="bye-label">1 POINT</span></td></tr>`;
       }
       if (pair.result !== null) entered++;
       const white = playerById(pair.white); const black = playerById(pair.black);
       const resultValue = pair.result || '';
-      return `<tr><td class="board-num">${String(index + 1).padStart(2, '0')}</td><td><div class="board-player"><span class="player-avatar">${escapeHTML(initials(white.name))}</span><span>${escapeHTML(white.name)}<small>${white.rating || 'UNRATED'} · SEED ${white.seed}</small></span></div></td><td><span class="color-chip" title="White"></span></td><td><div class="board-player"><span class="player-avatar">${escapeHTML(initials(black.name))}</span><span>${escapeHTML(black.name)}<small>${black.rating || 'UNRATED'} · SEED ${black.seed}</small></span></div></td><td><select class="result-select ${locked ? 'is-locked' : ''}" data-pairing="${index}" data-round="${selectedRound}" aria-label="Result for board ${index + 1}" ${locked ? 'disabled' : ''}><option value="" ${!resultValue ? 'selected' : ''}>Enter result…</option><option value="1-0" ${resultValue === '1-0' ? 'selected' : ''}>White wins · 1–0</option><option value="0-1" ${resultValue === '0-1' ? 'selected' : ''}>Black wins · 0–1</option><option value="½-½" ${resultValue === '½-½' ? 'selected' : ''}>Draw · ½–½</option><option value="1-0f" ${resultValue === '1-0f' ? 'selected' : ''}>White wins · forfeit</option><option value="0-1f" ${resultValue === '0-1f' ? 'selected' : ''}>Black wins · forfeit</option></select></td></tr>`;
+      return `<tr><td class="board-num">${String(index + 1).padStart(2, '0')}</td><td><div class="board-player"><span class="board-player-name">${escapeHTML(white.name)}<small>${white.rating || 'UNRATED'} · SEED ${white.seed}</small></span></div></td><td><div class="board-player"><span class="board-player-name">${escapeHTML(black.name)}<small>${black.rating || 'UNRATED'} · SEED ${black.seed}</small></span></div></td><td><select class="result-select ${locked ? 'is-locked' : ''}" data-pairing="${index}" data-round="${selectedRound}" aria-label="Result for board ${index + 1}" ${locked ? 'disabled' : ''}><option value="" ${!resultValue ? 'selected' : ''}>Enter result…</option><option value="1-0" ${resultValue === '1-0' ? 'selected' : ''}>White wins · 1–0</option><option value="0-1" ${resultValue === '0-1' ? 'selected' : ''}>Black wins · 0–1</option><option value="½-½" ${resultValue === '½-½' ? 'selected' : ''}>Draw · ½–½</option><option value="1-0f" ${resultValue === '1-0f' ? 'selected' : ''}>White wins · forfeit</option><option value="0-1f" ${resultValue === '0-1f' ? 'selected' : ''}>Black wins · forfeit</option></select></td></tr>`;
     }).join('');
     const total = pairings.length;
     els.progressText.textContent = `${entered} of ${total} results entered`;
@@ -484,7 +483,7 @@
       const skipLabel = !withdrawalLabel && Number.isInteger(nextSkip) ? ` · SITS OUT R${nextSkip + 1}` : '';
       const status = withdrawalLabel || skipLabel;
       const action = canManageSwissPlayers ? `<button type="button" class="manage-player" data-manage-player="${escapeHTML(player.id)}" title="Manage ${escapeHTML(player.name)}" aria-label="Manage ${escapeHTML(player.name)}">···</button>` : '';
-      return `<div class="standing-row ${podium ? `podium podium-${index + 1}` : ''} ${tournament.complete && podium ? 'final-podium' : ''} ${withdrawalLabel ? 'is-withdrawn' : ''}"><span class="standing-rank ${podium ? 'top' : ''}">${String(index + 1).padStart(2, '0')}</span><div class="standing-person"><span class="player-avatar">${escapeHTML(initials(player.name))}</span><div><b>${escapeHTML(player.name)}</b><small>${player.rating || 'UNRATED'} · ${tieLabel} ${player.tieBreak.toFixed(1)}${joinedLabel}${status}</small></div></div><span class="standing-points">${formatPoints(player.points)}</span>${action}</div>`;
+      return `<div class="standing-row ${podium ? `podium podium-${index + 1}` : ''} ${tournament.complete && podium ? 'final-podium' : ''} ${withdrawalLabel ? 'is-withdrawn' : ''}"><span class="standing-rank ${podium ? 'top' : ''}">${String(index + 1).padStart(2, '0')}</span><div class="standing-person"><div><b>${escapeHTML(player.name)}</b><small>${player.rating || 'UNRATED'} · ${tieLabel} ${player.tieBreak.toFixed(1)}${joinedLabel}${status}</small></div></div><span class="standing-points">${formatPoints(player.points)}</span>${action}</div>`;
     }).join('');
   }
 
