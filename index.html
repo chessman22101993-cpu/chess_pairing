@@ -16,7 +16,7 @@
     catch (_) { document.documentElement.dataset.theme = 'light'; }
     document.querySelector('meta[name="theme-color"]').content = document.documentElement.dataset.theme === 'dark' ? '#141a17' : '#f5f3ee';
   </script>
-  <link rel="stylesheet" href="./styles.css?v=2">
+  <link rel="stylesheet" href="./styles.css?v=3">
 </head>
 <body>
   <div class="app-shell">
@@ -91,7 +91,7 @@
               <div class="round-panel-head"><div><div class="eyebrow">LIVE PAIRINGS</div><h2 id="roundHeading">Round 1</h2><p id="roundDescription">Enter each result to complete this round.</p></div><div class="round-status" id="roundStatus"><i></i> IN PROGRESS</div></div>
               <div class="round-tabs" id="roundTabs"></div>
               <p class="pairing-scroll-hint">Swipe sideways to see all pairing details ↔</p>
-              <div class="pairing-table-wrap"><table class="pairing-table"><thead><tr><th>BOARD</th><th>WHITE</th><th class="versus-heading">VS</th><th>BLACK</th><th>RESULT</th></tr></thead><tbody id="pairingRows"></tbody></table></div>
+              <div class="pairing-table-wrap"><table class="pairing-table"><thead><tr><th>BOARD</th><th>WHITE</th><th class="versus-heading"></th><th>BLACK</th><th>RESULT</th></tr></thead><tbody id="pairingRows"></tbody></table></div>
               <div class="round-panel-foot"><div class="result-progress"><span id="resultProgressText">0 of 0 results entered</span><div class="progress-track"><i id="resultProgressBar"></i></div></div><button id="nextRound" class="button button-primary next-button" type="button" disabled>Complete round <span>→</span></button></div>
               <div id="finishedBanner" class="finished-banner hidden"><span>✦</span><div><b>Tournament complete</b><small>All rounds have been played. Final standings are ready.</small></div></div>
             </section>
@@ -133,15 +133,25 @@
   </dialog>
   <dialog id="playerManageDialog" class="late-dialog manage-dialog" aria-labelledby="playerManageTitle">
     <div class="late-dialog-form">
-      <div class="late-dialog-top"><div class="step-label"><span>♙</span> SWISS PLAYER STATUS</div><button type="button" id="closePlayerManage" class="close-info" aria-label="Close dialog">×</button></div>
+      <div class="late-dialog-top"><div class="step-label"><span>♙</span> PLAYER OPTIONS</div><button type="button" id="closePlayerManage" class="close-info" aria-label="Close dialog">×</button></div>
       <h2 id="playerManageTitle">Manage player</h2>
       <p id="playerManageNote" class="late-entry-note"></p>
       <div id="playerManageActions" class="player-manage-actions"></div>
       <div class="late-dialog-actions"><button type="button" id="cancelPlayerManage" class="button button-quiet">Done</button></div>
     </div>
   </dialog>
+  <dialog id="renamePlayerDialog" class="late-dialog" aria-labelledby="renamePlayerTitle">
+    <form id="renamePlayerForm" class="late-dialog-form">
+      <div class="late-dialog-top"><div class="step-label"><span>✎</span> PLAYER NAME</div><button type="button" id="closeRenamePlayer" class="close-info" aria-label="Close dialog">×</button></div>
+      <h2 id="renamePlayerTitle">Rename player</h2>
+      <p class="late-entry-note">This updates the name shown in pairings and standings. Results and scores stay the same.</p>
+      <label class="field-label" for="renamePlayerName">Player name</label>
+      <input id="renamePlayerName" class="text-input" type="text" maxlength="50" required>
+      <div class="late-dialog-actions"><button type="button" id="cancelRenamePlayer" class="button button-quiet">Cancel</button><button type="submit" class="button button-primary">Save name <span>→</span></button></div>
+    </form>
+  </dialog>
   <input id="restoreBackupFile" type="file" accept=".json,application/json" hidden>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="./app.js?v=2"></script>
+  <script src="./app.js?v=3"></script>
 </body>
 </html>

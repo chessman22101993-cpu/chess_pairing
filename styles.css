@@ -103,5 +103,5 @@
 .standing-person b{font-size:12px;font-weight:800;color:#34483a}
 .versus-heading,.versus-cell{width:38px;text-align:center}
 .versus-heading{font-size:8px!important}
-.versus{display:inline-block;color:#78857d;font:700 9px "DM Mono",monospace}
-:root[data-theme="dark"] .versus{color:#aebbb2}
+.versus{display:inline-block;color:#536259;font:800 11px "DM Sans",sans-serif;letter-spacing:.4px}
+:root[data-theme="dark"] .versus{color:#d1ddd4}

@@ -362,26 +362,54 @@
   function openPlayerManageDialog(playerId) {
     const tournament = currentTournament();
     const player = playerById(playerId);
-    if (!tournament || tournament.format !== 'swiss' || tournament.complete || !player) return;
+    if (!tournament || !player) return;
     managedPlayerId = playerId;
     const nextRoundIndex = tournament.currentRound + 1;
-    const hasNextRound = nextRoundIndex < tournament.totalRounds;
+    const canManageSwissPlayer = tournament.format === 'swiss' && !tournament.complete && nextRoundIndex < tournament.totalRounds;
     const withdrawn = Number.isInteger(player.withdrawnFromRound) && player.withdrawnFromRound <= nextRoundIndex;
     const skipped = (player.skippedRounds || []).includes(nextRoundIndex);
     $('#playerManageTitle').textContent = player.name;
-    $('#playerManageNote').textContent = hasNextRound
-      ? `Changes apply from ${roundLabel(nextRoundIndex)}. Past scores stay as recorded. If this player is already paired in the current round and does not show, enter a forfeit result on that board.`
-      : 'There are no unpaired rounds left. Past scores stay as recorded.';
-    $('#playerManageActions').innerHTML = !hasNextRound ? '<p class="manage-empty">No future rounds to update.</p>' : withdrawn
+    $('#playerManageNote').textContent = 'Renaming updates this player everywhere. Pairings, results, ratings, and scores remain unchanged.';
+    const renameAction = '<button type="button" class="manage-action" data-player-action="rename">✎ <span><b>Rename player</b><small>Change the name shown throughout this tournament.</small></span></button>';
+    const swissActions = !canManageSwissPlayer ? '<p class="manage-empty">No future pairing status changes are available.</p>' : withdrawn
       ? `<button type="button" class="manage-action reinstate" data-player-action="reinstate">↻ <span><b>Reinstate for ${roundLabel(nextRoundIndex)}</b><small>Include this player in future pairings again.</small></span></button>`
       : `${skipped ? `<button type="button" class="manage-action" data-player-action="cancel-skip">↶ <span><b>Cancel skip for ${roundLabel(nextRoundIndex)}</b><small>Keep this player eligible for the next pairing.</small></span></button>` : `<button type="button" class="manage-action" data-player-action="skip">◷ <span><b>Skip ${roundLabel(nextRoundIndex)}</b><small>Give 0 points for this round, then allow a return.</small></span></button>`}<button type="button" class="manage-action withdraw" data-player-action="withdraw">⊘ <span><b>Withdraw before ${roundLabel(nextRoundIndex)}</b><small>Keep past results and remove from later pairings.</small></span></button>`;
+    $('#playerManageActions').innerHTML = renameAction + swissActions;
     $('#playerManageDialog').showModal();
+  }
+
+  function openRenamePlayerDialog() {
+    const player = playerById(managedPlayerId);
+    if (!player) return;
+    $('#renamePlayerName').value = player.name;
+    $('#playerManageDialog').close();
+    $('#renamePlayerDialog').showModal();
+    $('#renamePlayerName').focus();
+  }
+
+  function submitRenamePlayer(event) {
+    event.preventDefault();
+    const player = playerById(managedPlayerId);
+    const name = $('#renamePlayerName').value.trim();
+    if (!player || !name) return;
+    if (state.players.some((other) => other.id !== player.id && other.name.toLocaleLowerCase() === name.toLocaleLowerCase())) {
+      toast('A player with that name is already in the tournament.');
+      return;
+    }
+    const previousName = player.name;
+    player.name = name;
+    save();
+    $('#renamePlayerDialog').close();
+    render();
+    toast(previousName === name ? 'Player name unchanged.' : `${previousName} renamed to ${name}.`);
   }
 
   function applyPlayerAction(action) {
     const tournament = currentTournament();
     const player = playerById(managedPlayerId);
-    if (!tournament || !player || tournament.complete) return;
+    if (!tournament || !player) return;
+    if (action === 'rename') { openRenamePlayerDialog(); return; }
+    if (tournament.format !== 'swiss' || tournament.complete) return;
     const nextRoundIndex = tournament.currentRound + 1;
     if (nextRoundIndex >= tournament.totalRounds) return;
     if (!Array.isArray(player.skippedRounds)) player.skippedRounds = [];
@@ -456,7 +484,7 @@
       if (pair.result !== null) entered++;
       const white = playerById(pair.white); const black = playerById(pair.black);
       const resultValue = pair.result || '';
-      return `<tr><td class="board-num">${String(index + 1).padStart(2, '0')}</td><td><div class="board-player"><span class="board-player-name">${escapeHTML(white.name)}<small>${white.rating || 'UNRATED'} · SEED ${white.seed}</small></span></div></td><td class="versus-cell"><span class="versus">vs</span></td><td><div class="board-player"><span class="board-player-name">${escapeHTML(black.name)}<small>${black.rating || 'UNRATED'} · SEED ${black.seed}</small></span></div></td><td><select class="result-select ${locked ? 'is-locked' : ''}" data-pairing="${index}" data-round="${selectedRound}" aria-label="Result for board ${index + 1}" ${locked ? 'disabled' : ''}><option value="" ${!resultValue ? 'selected' : ''}>Enter result…</option><option value="1-0" ${resultValue === '1-0' ? 'selected' : ''}>White wins · 1–0</option><option value="0-1" ${resultValue === '0-1' ? 'selected' : ''}>Black wins · 0–1</option><option value="½-½" ${resultValue === '½-½' ? 'selected' : ''}>Draw · ½–½</option><option value="1-0f" ${resultValue === '1-0f' ? 'selected' : ''}>White wins · forfeit</option><option value="0-1f" ${resultValue === '0-1f' ? 'selected' : ''}>Black wins · forfeit</option></select></td></tr>`;
+      return `<tr><td class="board-num">${String(index + 1).padStart(2, '0')}</td><td><div class="board-player"><span class="board-player-name">${escapeHTML(white.name)}<small>${white.rating || 'UNRATED'} · SEED ${white.seed}</small></span></div></td><td class="versus-cell"><span class="versus">VS</span></td><td><div class="board-player"><span class="board-player-name">${escapeHTML(black.name)}<small>${black.rating || 'UNRATED'} · SEED ${black.seed}</small></span></div></td><td><select class="result-select ${locked ? 'is-locked' : ''}" data-pairing="${index}" data-round="${selectedRound}" aria-label="Result for board ${index + 1}" ${locked ? 'disabled' : ''}><option value="" ${!resultValue ? 'selected' : ''}>Enter result…</option><option value="1-0" ${resultValue === '1-0' ? 'selected' : ''}>White wins · 1–0</option><option value="0-1" ${resultValue === '0-1' ? 'selected' : ''}>Black wins · 0–1</option><option value="½-½" ${resultValue === '½-½' ? 'selected' : ''}>Draw · ½–½</option><option value="1-0f" ${resultValue === '1-0f' ? 'selected' : ''}>White wins · forfeit</option><option value="0-1f" ${resultValue === '0-1f' ? 'selected' : ''}>Black wins · forfeit</option></select></td></tr>`;
     }).join('');
     const total = pairings.length;
     els.progressText.textContent = `${entered} of ${total} results entered`;
@@ -474,7 +502,7 @@
     const tournament = currentTournament();
     const tieLabel = tournament.format === 'swiss' ? 'BH' : 'SB';
     const canManageSwissPlayers = tournament.format === 'swiss' && !tournament.complete && tournament.currentRound + 1 < tournament.totalRounds;
-    $('#standingHint').textContent = canManageSwissPlayers ? 'Use ··· by a player to skip a round or withdraw.' : `Tie-break: ${tieLabel} · then FIDE rating`;
+    $('#standingHint').textContent = canManageSwissPlayers ? `Use ··· to rename or manage a player. Tie-break: ${tieLabel} · then FIDE rating` : `Use ··· to rename a player. Tie-break: ${tieLabel} · then FIDE rating`;
     els.standingsRows.innerHTML = standings.map((player, index) => {
       const podium = index < 3;
       const joinedLabel = Number.isInteger(player.joinedRound) ? ` · JOINS R${player.joinedRound + 1}` : '';
@@ -482,7 +510,7 @@
       const nextSkip = (player.skippedRounds || []).filter((roundIndex) => roundIndex >= tournament.currentRound).sort((a, b) => a - b)[0];
       const skipLabel = !withdrawalLabel && Number.isInteger(nextSkip) ? ` · SITS OUT R${nextSkip + 1}` : '';
       const status = withdrawalLabel || skipLabel;
-      const action = canManageSwissPlayers ? `<button type="button" class="manage-player" data-manage-player="${escapeHTML(player.id)}" title="Manage ${escapeHTML(player.name)}" aria-label="Manage ${escapeHTML(player.name)}">···</button>` : '';
+      const action = `<button type="button" class="manage-player" data-manage-player="${escapeHTML(player.id)}" title="Rename or manage ${escapeHTML(player.name)}" aria-label="Rename or manage ${escapeHTML(player.name)}">···</button>`;
       return `<div class="standing-row ${podium ? `podium podium-${index + 1}` : ''} ${tournament.complete && podium ? 'final-podium' : ''} ${withdrawalLabel ? 'is-withdrawn' : ''}"><span class="standing-rank ${podium ? 'top' : ''}">${String(index + 1).padStart(2, '0')}</span><div class="standing-person"><div><b>${escapeHTML(player.name)}</b><small>${player.rating || 'UNRATED'} · ${tieLabel} ${player.tieBreak.toFixed(1)}${joinedLabel}${status}</small></div></div><span class="standing-points">${formatPoints(player.points)}</span>${action}</div>`;
     }).join('');
   }
@@ -714,6 +742,9 @@
   $('#cancelLatePlayer').addEventListener('click', () => $('#latePlayerDialog').close());
   $('#closePlayerManage').addEventListener('click', () => $('#playerManageDialog').close());
   $('#cancelPlayerManage').addEventListener('click', () => $('#playerManageDialog').close());
+  $('#renamePlayerForm').addEventListener('submit', submitRenamePlayer);
+  $('#closeRenamePlayer').addEventListener('click', () => $('#renamePlayerDialog').close());
+  $('#cancelRenamePlayer').addEventListener('click', () => $('#renamePlayerDialog').close());
   $('#pairingInfoToggle').addEventListener('click', () => { els.info.classList.toggle('hidden'); if (!els.info.classList.contains('hidden')) els.info.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
   $('#closeInfo').addEventListener('click', () => els.info.classList.add('hidden'));
   $('#navTournament').addEventListener('click', () => { if (currentTournament()) window.scrollTo({ top: 0, behavior: 'smooth' }); else render(); });
