@@ -27,6 +27,8 @@ The app can be published for free with GitHub Pages:
 
 The hosted app caches its files after the first online visit, so it can open offline afterward. Tournament data remains local to each browser; use **JSON backup** and **Restore backup** to move a tournament between devices. Opening `index.html` directly with a `file://` URL does not enable app installation or service-worker caching.
 
+Use the moon/sun control in the top bar to switch between light and dark themes. The choice is saved in that browser.
+
 ## Pairing rules reference
 
 The Swiss approach follows core principles in the current FIDE handbook: declare the number of rounds in advance, rank the initial field by rating, pair primarily within score groups, avoid repeat opponents, award byes consistently, and balance colours. The Swiss implementation here is intended for club use; it is not a FIDE-certified pairing engine and does not reproduce every clause of the FIDE Dutch system.

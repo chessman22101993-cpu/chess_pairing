@@ -2,6 +2,7 @@
   'use strict';
 
   const STORAGE_KEY = 'pairing-desk-v1';
+  const THEME_STORAGE_KEY = 'pairing-desk-theme';
   const $ = (selector) => document.querySelector(selector);
   const els = {
     name: $('#tournamentName'), roundCount: $('#roundCount'), playerName: $('#playerName'), playerRating: $('#playerRating'),
@@ -530,6 +531,21 @@
     $('#installAppButton')?.classList.toggle('hidden', !deferredInstallPrompt);
   }
 
+  function applyTheme(theme, persist = true) {
+    const isDark = theme === 'dark';
+    const value = isDark ? 'dark' : 'light';
+    document.documentElement.dataset.theme = value;
+    document.querySelector('meta[name="theme-color"]').content = isDark ? '#141a17' : '#f5f3ee';
+    const toggle = $('#themeToggle');
+    toggle.textContent = isDark ? '☀' : '☾';
+    toggle.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} mode`);
+    toggle.setAttribute('aria-pressed', String(isDark));
+    toggle.title = `Switch to ${isDark ? 'light' : 'dark'} mode`;
+    if (persist) {
+      try { localStorage.setItem(THEME_STORAGE_KEY, value); } catch (_) { /* Theme still changes for this visit. */ }
+    }
+  }
+
   function toast(message) {
     clearTimeout(toastTimer);
     els.toast.textContent = message;
@@ -702,6 +718,9 @@
   $('#pairingInfoToggle').addEventListener('click', () => { els.info.classList.toggle('hidden'); if (!els.info.classList.contains('hidden')) els.info.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
   $('#closeInfo').addEventListener('click', () => els.info.classList.add('hidden'));
   $('#navTournament').addEventListener('click', () => { if (currentTournament()) window.scrollTo({ top: 0, behavior: 'smooth' }); else render(); });
+  $('#themeToggle').addEventListener('click', () => {
+    applyTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+  });
 
   window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
@@ -723,5 +742,6 @@
   }
 
   if (state.tournament) selectedRound = state.tournament.currentRound;
+  applyTheme(document.documentElement.dataset.theme, false);
   render();
 })();

@@ -17,3 +17,81 @@
 @media (max-width:540px){.topbar{padding-left:max(13px,env(safe-area-inset-left));padding-right:max(13px,env(safe-area-inset-right))}.page-wrap{padding-left:12px;padding-right:12px}.pairing-scroll-hint{display:block;margin:0 14px 7px;text-align:right;color:#929b96;font-size:9px}}
 .sidebar{display:none}
 .main-area{margin-left:0}
+:root[data-theme="dark"]{color-scheme:dark;--paper:#141a17;--card:#1d2521;--ink:#edf3ee;--muted:#a5b0a9;--line:#37443b;--green:#70a482;--green-dark:#588e6a;--mint:#26392d;--orange:#d99a70;--navy:#e7eee8;--shadow:0 10px 35px rgba(0,0,0,.24)}
+:root[data-theme="dark"] body{background:var(--paper);color:var(--ink)}
+:root[data-theme="dark"] .topbar{border-color:#303a33;background:rgba(20,26,23,.94)}
+:root[data-theme="dark"] .breadcrumbs,:root[data-theme="dark"] .page-heading p,:root[data-theme="dark"] .section-head p,:root[data-theme="dark"] .round-panel-head p,:root[data-theme="dark"] .helper-text{color:#a4b0a8}
+:root[data-theme="dark"] .breadcrumbs strong,:root[data-theme="dark"] .field-label,:root[data-theme="dark"] .format-copy b,:root[data-theme="dark"] .number-control input{color:#e5eee7}
+:root[data-theme="dark"] .eyebrow,:root[data-theme="dark"] .step-label,:root[data-theme="dark"] .step-progress,:root[data-theme="dark"] .roster-head,:root[data-theme="dark"] .standings-meta,:root[data-theme="dark"] .pairing-table th,:root[data-theme="dark"] .round-status{color:#9ca9a1}
+:root[data-theme="dark"] .offline-pill{border-color:#354239;background:#202a24;color:#becbc1}
+:root[data-theme="dark"] .theme-toggle{border-color:#405047;background:#25312a;color:#f0d38b}
+:root[data-theme="dark"] .avatar{background:#304337;color:#d5e7d9}
+:root[data-theme="dark"] .card{border-color:#303b34;background:var(--card)}
+:root[data-theme="dark"] .text-input,:root[data-theme="dark"] .bulk-entry textarea{border-color:#3b4940;background:#151c18;color:var(--ink)}
+:root[data-theme="dark"] .text-input::placeholder,:root[data-theme="dark"] textarea::placeholder{color:#7f8d84}
+:root[data-theme="dark"] .text-input:focus,:root[data-theme="dark"] textarea:focus{border-color:#79a98a;box-shadow:0 0 0 3px #7aa88a25}
+:root[data-theme="dark"] .format-card{border-color:#354239;background:#202923}
+:root[data-theme="dark"] .format-card.selected{border-color:#71947b;background:#25382b;box-shadow:inset 0 0 0 1px #71947b}
+:root[data-theme="dark"] .format-copy small,:root[data-theme="dark"] .format-copy em{color:#a8b5ac}
+:root[data-theme="dark"] .swiss-icon,:root[data-theme="dark"] .number-control button{background:#2a3a30;color:#acd1b5}
+:root[data-theme="dark"] .rr-icon{background:#382f27;color:#e0b18b}
+:root[data-theme="dark"] .radio-mark{border-color:#607067}
+:root[data-theme="dark"] .rounds-row,:root[data-theme="dark"] .bulk-entry,:root[data-theme="dark"] .roster-footer,:root[data-theme="dark"] .player-row{border-color:#303b34}
+:root[data-theme="dark"] .number-control{border-color:#3b4940;background:#151c18}
+:root[data-theme="dark"] .number-control input{border-color:#354239;background:#151c18}
+:root[data-theme="dark"] .round-count-badge,:root[data-theme="dark"] .button-secondary{border-color:#3b4b40;background:#26372c;color:#b9d6c0}
+:root[data-theme="dark"] .button-secondary:hover{background:#304437}
+:root[data-theme="dark"] .button-quiet{border-color:#38443c;background:#252d28;color:#c0cbc3}
+:root[data-theme="dark"] .button-primary{color:#102117}
+:root[data-theme="dark"] .button-primary:disabled{background:#46534b;color:#aab5ad}
+:root[data-theme="dark"] .bulk-entry summary,:root[data-theme="dark"] .text-button,:root[data-theme="dark"] .round-tab.active{color:#9dcaab}
+:root[data-theme="dark"] .roster-head b,:root[data-theme="dark"] .player-name,:root[data-theme="dark"] .standing-person b,:root[data-theme="dark"] .manage-action b{color:#d8e4dc}
+:root[data-theme="dark"] .empty-roster,:root[data-theme="dark"] .empty-roster b,:root[data-theme="dark"] .player-rating,:root[data-theme="dark"] .helper-text,:root[data-theme="dark"] .optional{color:#9aa79f}
+:root[data-theme="dark"] .player-avatar,:root[data-theme="dark"] .trophy-mark,:root[data-theme="dark"] .count-pill{background:#2b3a30;color:#afd0b7}
+:root[data-theme="dark"] .round-status{background:#26382c;color:#a9cfb1}
+:root[data-theme="dark"] .round-status.complete{background:#393328;color:#d4b98b}
+:root[data-theme="dark"] .summary-metric .status-in-progress{color:#a9cfb1}
+:root[data-theme="dark"] .summary-metric .status-complete{color:#dfc18d}
+:root[data-theme="dark"] .summary-metric{border-color:#354139}
+:root[data-theme="dark"] .summary-metric small,:root[data-theme="dark"] .summary-metric b,:root[data-theme="dark"] .standing-rank{color:#aab6ae}
+:root[data-theme="dark"] .round-tabs,:root[data-theme="dark"] .standings-meta{border-color:#354139}
+:root[data-theme="dark"] .round-tab{color:#a0ada4}
+:root[data-theme="dark"] .pairing-table th{border-color:#354139;background:#202923;color:#aab6ae}
+:root[data-theme="dark"] .pairing-table td,:root[data-theme="dark"] .standing-row{border-color:#303b34}
+:root[data-theme="dark"] .board-player span:last-child,:root[data-theme="dark"] .board-num,:root[data-theme="dark"] .board-player small{color:#b5c1b9}
+:root[data-theme="dark"] .color-chip{border-color:#546158;background:#202923}
+:root[data-theme="dark"] .result-select{border-color:#3d4b42;background:#151c18;color:#e1e9e3}
+:root[data-theme="dark"] .result-select:disabled{border-color:#374239;background:#242c27;color:#98a49c}
+:root[data-theme="dark"] .bye-row td,:root[data-theme="dark"] .scoring-note{background:#252d27}
+:root[data-theme="dark"] .bye-label,:root[data-theme="dark"] .scoring-icon{background:#393328;color:#dec08b}
+:root[data-theme="dark"] .bye-result,:root[data-theme="dark"] .result-progress,:root[data-theme="dark"] .standing-points{color:#b7c7bd}
+:root[data-theme="dark"] .progress-track{background:#374239}
+:root[data-theme="dark"] .round-lock.locked{color:#a7cfaf}
+:root[data-theme="dark"] .round-lock:hover,:root[data-theme="dark"] .manage-player:hover{background:#293b2f;color:#a6cfaf}
+:root[data-theme="dark"] .finished-banner{border-color:#35483a;background:#25362a;color:#b9d6c0}
+:root[data-theme="dark"] .finished-banner small,:root[data-theme="dark"] .standing-person small,:root[data-theme="dark"] .scoring-note small,:root[data-theme="dark"] .late-entry-note,:root[data-theme="dark"] .manage-action small{color:#a0aca4}
+:root[data-theme="dark"] .standing-row.podium-1{border-color:#645537;background:#332e21}
+:root[data-theme="dark"] .standing-row.podium-2{border-color:#465149;background:#27302a}
+:root[data-theme="dark"] .standing-row.podium-3{border-color:#624936;background:#352b24}
+:root[data-theme="dark"] .standing-row.podium-1 .standing-rank{background:#594b2c;color:#f1d38d}
+:root[data-theme="dark"] .standing-row.podium-2 .standing-rank{background:#3a4740;color:#c5d1c9}
+:root[data-theme="dark"] .standing-row.podium-3 .standing-rank{background:#563c2c;color:#e8b791}
+:root[data-theme="dark"] .standing-row.podium .standing-person b,:root[data-theme="dark"] .standing-row.is-withdrawn .standing-person b{color:#e3eee5}
+:root[data-theme="dark"] .standing-row.is-withdrawn .standing-person small{color:#a0aca4}
+:root[data-theme="dark"] .standing-row.final-podium .standing-person b{color:#e3eee5}
+:root[data-theme="dark"] .late-dialog{border-color:#37443b;background:#1d2521;color:var(--ink)}
+:root[data-theme="dark"] .manage-action{border-color:#37443b;background:#242d27;color:#b5d4bc}
+:root[data-theme="dark"] .manage-action:hover{border-color:#506554;background:#2b3b30}
+:root[data-theme="dark"] .manage-action.withdraw{color:#e0a18b}
+:root[data-theme="dark"] .manage-action.withdraw b{color:#e3b6a4}
+:root[data-theme="dark"] .manage-action.reinstate{color:#a9d0b1}
+:root[data-theme="dark"] .pairing-info-toggle{border-color:#354139}
+:root[data-theme="dark"] .info-columns b,:root[data-theme="dark"] .source-note a{color:#aad0b2}
+:root[data-theme="dark"] .source-note{border-color:#354139;color:#a9b5ad}
+:root[data-theme="dark"] .scoring-note b{color:#d6e1d9}
+:root[data-theme="dark"] .setup-hint{color:#a4b0a8}
+:root[data-theme="dark"] .close-info{color:#aab6ae}
+:root[data-theme="dark"] .pairing-scroll-hint{color:#9ca9a1}
+.theme-toggle{display:grid;place-items:center;flex:none;width:30px;height:30px;padding:0;border:1px solid #e5e5dc;border-radius:50%;background:#faf9f5;color:#65766d;font-size:17px;line-height:1;transition:background .15s,color .15s}
+.theme-toggle:hover{background:#eef2ec}
+@media (max-width:540px){.top-actions{gap:8px}.theme-toggle{width:28px;height:28px}}

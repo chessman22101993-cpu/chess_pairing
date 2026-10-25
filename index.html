@@ -11,6 +11,11 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icons/icon-192.png" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <script>
+    try { document.documentElement.dataset.theme = localStorage.getItem('pairing-desk-theme') === 'dark' ? 'dark' : 'light'; }
+    catch (_) { document.documentElement.dataset.theme = 'light'; }
+    document.querySelector('meta[name="theme-color"]').content = document.documentElement.dataset.theme === 'dark' ? '#141a17' : '#f5f3ee';
+  </script>
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
@@ -31,7 +36,7 @@
     <main class="main-area">
       <header class="topbar">
         <div class="breadcrumbs"><span>Workspace</span><span class="crumb-slash">/</span><strong>Tournament desk</strong></div>
-        <div class="top-actions"><span class="offline-pill"><i></i> Offline mode</span><button class="avatar" aria-label="Organizer">O</button></div>
+        <div class="top-actions"><span class="offline-pill"><i></i> Offline mode</span><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode">☾</button><button class="avatar" aria-label="Organizer">O</button></div>
       </header>
 
       <div class="page-wrap">
