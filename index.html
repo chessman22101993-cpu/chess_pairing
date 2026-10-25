@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f3ee">
+  <title>Pairing Desk — Chess Tournament Manager</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="Pairing Desk home">
+        <span class="brand-mark">♞</span>
+        <span><b>pairing</b><small>DESK</small></span>
+      </a>
+      <div class="sidebar-label">WORKSPACE</div>
+      <button class="nav-item active" id="navTournament"><span class="nav-icon">▦</span> Tournament desk</button>
+      <div class="sidebar-bottom">
+        <div class="sidebar-note"><span class="note-icon">●</span><div><b>Saved on this device</b><small>Your tournament stays in this browser.</small></div></div>
+        <div class="sidebar-foot">PAIRING DESK <span>v1.0</span></div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="breadcrumbs"><span>Workspace</span><span class="crumb-slash">/</span><strong>Tournament desk</strong></div>
+        <div class="top-actions"><span class="offline-pill"><i></i> Offline mode</span><button class="avatar" aria-label="Organizer">O</button></div>
+      </header>
+
+      <div class="page-wrap">
+        <section class="page-heading">
+          <div><div class="eyebrow">CHESS TOURNAMENT MANAGER</div><h1 id="pageTitle">Tournament desk</h1><p id="pageSubtitle">Set up your field, make pairings, and keep the standings moving.</p></div>
+          <div class="heading-actions" id="headingActions"></div>
+        </section>
+
+        <section id="setupView" class="setup-layout">
+          <div class="setup-main card">
+            <div class="section-head"><div><div class="step-label"><span>01</span> TOURNAMENT DETAILS</div><h2>Start with the basics</h2><p>Choose a format and set up your tournament.</p></div><span class="step-progress">STEP 1 OF 2</span></div>
+            <label class="field-label" for="tournamentName">Tournament name</label>
+            <input id="tournamentName" class="text-input" type="text" maxlength="60" placeholder="e.g. Sunday Rapid Open">
+            <div class="format-label-row"><span class="field-label">Pairing format</span><span class="helper-text">Choose how players will be matched</span></div>
+            <div class="format-options">
+              <label class="format-card selected" data-format="swiss"><input type="radio" name="format" value="swiss" checked><span class="format-icon swiss-icon">↗</span><span class="format-copy"><b>Swiss system</b><small>Pair players on similar scores each round. Great for larger groups.</small><em>Most flexible</em></span><span class="radio-mark"></span></label>
+              <label class="format-card" data-format="roundRobin"><input type="radio" name="format" value="roundRobin"><span class="format-icon rr-icon">⟳</span><span class="format-copy"><b>Round robin</b><small>Everyone plays everyone. Ideal for smaller groups.</small><em>Complete schedule</em></span><span class="radio-mark"></span></label>
+            </div>
+            <div id="swissRoundsRow" class="rounds-row"><div><label class="field-label" for="roundCount">Number of rounds</label><small class="helper-text">Set before the first round</small></div><div class="number-control"><button type="button" id="roundMinus" aria-label="Decrease rounds">−</button><input id="roundCount" type="number" min="1" max="20" value="5"><button type="button" id="roundPlus" aria-label="Increase rounds">+</button></div></div>
+            <div id="rrInfo" class="rounds-row hidden"><div><span class="field-label">Number of rounds</span><small class="helper-text">Calculated to give every pair one game</small></div><div class="round-count-badge" id="rrRoundCount">— rounds</div></div>
+          </div>
+
+          <aside class="setup-aside">
+            <div class="card participants-card">
+              <div class="section-head compact"><div><div class="step-label"><span>02</span> PLAYER ROSTER</div><h2>Add participants</h2><p>FIDE rating helps seed the first round.</p></div></div>
+              <form id="playerForm" class="player-form">
+                <div class="field"><label class="field-label" for="playerName">Player name</label><input id="playerName" class="text-input" type="text" maxlength="50" placeholder="Full name" required></div>
+                <div class="field"><label class="field-label" for="playerRating">FIDE rating <span class="optional">OPTIONAL</span></label><input id="playerRating" class="text-input" type="number" min="0" max="4000" placeholder="0 if unrated"></div>
+                <button class="button button-secondary add-player" type="submit"><span>＋</span> Add player</button>
+              </form>
+              <details class="bulk-entry"><summary>Paste a player list</summary><p>One player per line. Use <code>Name, rating</code>. A blank rating is saved as 0.</p><textarea id="bulkPlayers" rows="4" placeholder="Alex Morgan, 1840&#10;Sam Lee, 0&#10;Jamie Patel"></textarea><button class="button button-quiet" id="bulkAdd" type="button">Add list</button></details>
+              <div class="roster-head"><span>PLAYER ROSTER</span><b id="playerCount">0 players</b></div>
+              <div id="playerList" class="player-list empty-roster"><div class="empty-roster-icon">♙</div><b>Your roster is empty</b><small>Add at least 2 players to begin.</small></div>
+              <div class="roster-footer"><span><i class="rating-dot"></i> Ratings sort highest to lowest</span><button id="clearPlayers" class="text-button" type="button" disabled>Clear all</button></div>
+            </div>
+            <button id="startTournament" class="button button-primary start-button" type="button" disabled>Start tournament <span>→</span></button>
+            <p class="setup-hint"><span>✦</span> Names and ratings stay on this device. No account needed.</p>
+          </aside>
+        </section>
+
+        <section id="tournamentView" class="tournament-view hidden">
+          <div class="summary-strip card">
+            <div class="summary-title"><span class="trophy-mark">♟</span><div><div class="eyebrow" id="summaryFormat">SWISS SYSTEM</div><h2 id="summaryName">Tournament</h2></div></div>
+            <div class="summary-metric"><small>PLAYERS</small><b id="summaryPlayers">0</b></div>
+            <div class="summary-metric"><small>ROUNDS</small><b id="summaryRounds">0</b></div>
+            <div class="summary-metric"><small>STATUS</small><b class="status-in-progress" id="summaryStatus">In progress</b></div>
+            <button id="exportCsv" class="button button-quiet export-button" type="button">↓ <span>Export standings</span></button>
+          </div>
+
+          <div class="content-grid">
+            <section class="round-panel card">
+              <div class="round-panel-head"><div><div class="eyebrow">LIVE PAIRINGS</div><h2 id="roundHeading">Round 1</h2><p id="roundDescription">Enter each result to complete this round.</p></div><div class="round-status" id="roundStatus"><i></i> IN PROGRESS</div></div>
+              <div class="round-tabs" id="roundTabs"></div>
+              <div class="pairing-table-wrap"><table class="pairing-table"><thead><tr><th>BOARD</th><th>WHITE</th><th></th><th>BLACK</th><th>RESULT</th></tr></thead><tbody id="pairingRows"></tbody></table></div>
+              <div class="round-panel-foot"><div class="result-progress"><span id="resultProgressText">0 of 0 results entered</span><div class="progress-track"><i id="resultProgressBar"></i></div></div><button id="nextRound" class="button button-primary next-button" type="button" disabled>Complete round <span>→</span></button></div>
+              <div id="finishedBanner" class="finished-banner hidden"><span>✦</span><div><b>Tournament complete</b><small>All rounds have been played. Final standings are ready.</small></div></div>
+            </section>
+
+            <aside class="standings-panel card">
+              <div class="standings-head"><div><div class="eyebrow">TOURNAMENT TABLE</div><h2>Standings</h2></div><span id="standingsCount" class="count-pill">0</span></div>
+              <p id="standingHint" class="standings-hint"></p>
+              <div class="standings-meta"><span>RANK</span><span>PLAYER</span><span>PTS</span></div>
+              <div id="standingsRows" class="standings-rows"></div>
+              <div class="scoring-note"><span class="scoring-icon">½</span><div><b>Scoring</b><small>Win 1 pt · Draw ½ pt · Loss 0 pt</small></div></div>
+              <button class="text-button pairing-info-toggle" id="pairingInfoToggle" type="button">How pairings work <span>↗</span></button>
+            </aside>
+          </div>
+        </section>
+        <section id="pairingInfo" class="pairing-info card hidden">
+          <button class="close-info" id="closeInfo" aria-label="Close pairing details">×</button>
+          <div class="eyebrow">PAIRING METHOD</div>
+          <h2>Built on Swiss principles</h2>
+          <div class="info-columns">
+            <p><b>Swiss:</b> Round 1 is seeded by FIDE rating, highest to lowest. Later rounds prioritize same-score opponents, avoid rematches, and use rating order as a stable tie-break. Colours are assigned to balance each player’s White and Black games. An odd field gets one bye, awarded to a low-ranked player who has not had one. Use a player menu to skip an upcoming round or withdraw.</p>
+            <p><b>Round robin:</b> A rotating schedule pairs every player against every other player once. For an odd field, each player receives one scheduled bye. Both formats award 1 point for a win, ½ for a draw, and 0 for a loss. A forfeit awards the point to the opponent but does not count as a played game for colour balance. Final ties use Buchholz (Swiss) or Sonneborn–Berger (round robin), then rating.</p>
+          </div>
+          <p class="source-note">FIDE’s 2026 rules require declared rounds, rating-based initial order, score groups, no repeat opponents, and color balancing. Known round absences score 0, and withdrawn players are no longer paired. This app uses those core ideas; its pairing engine is designed for local club use and is not FIDE-certified or a substitute for an approved FIDE pairing program. <a href="https://handbook.fide.com/chapter/GeneralHandlingRulesForSwissTournaments202602" target="_blank" rel="noopener">General handling rules ↗</a> · <a href="https://handbook.fide.com/chapter/C0403202602" target="_blank" rel="noopener">FIDE Dutch System ↗</a></p>
+        </section>
+      </div>
+    </main>
+  </div>
+  <dialog id="latePlayerDialog" class="late-dialog" aria-labelledby="lateDialogTitle">
+    <form id="latePlayerForm" class="late-dialog-form">
+      <div class="late-dialog-top"><div class="step-label"><span>＋</span> SWISS LATE ENTRY</div><button type="button" id="closeLateDialog" class="close-info" aria-label="Close dialog">×</button></div>
+      <h2 id="lateDialogTitle">Add a late player</h2>
+      <p id="lateEntryNote" class="late-entry-note">The player joins the next round. Earlier rounds remain unchanged.</p>
+      <label class="field-label" for="latePlayerName">Player name</label>
+      <input id="latePlayerName" class="text-input" type="text" maxlength="50" placeholder="Full name" required>
+      <label class="field-label late-rating-label" for="latePlayerRating">FIDE rating <span class="optional">OPTIONAL</span></label>
+      <input id="latePlayerRating" class="text-input" type="number" min="0" max="4000" placeholder="0 if unrated">
+      <div class="late-dialog-actions"><button type="button" id="cancelLatePlayer" class="button button-quiet">Cancel</button><button type="submit" class="button button-primary">Add player <span>→</span></button></div>
+    </form>
+  </dialog>
+  <dialog id="playerManageDialog" class="late-dialog manage-dialog" aria-labelledby="playerManageTitle">
+    <div class="late-dialog-form">
+      <div class="late-dialog-top"><div class="step-label"><span>♙</span> SWISS PLAYER STATUS</div><button type="button" id="closePlayerManage" class="close-info" aria-label="Close dialog">×</button></div>
+      <h2 id="playerManageTitle">Manage player</h2>
+      <p id="playerManageNote" class="late-entry-note"></p>
+      <div id="playerManageActions" class="player-manage-actions"></div>
+      <div class="late-dialog-actions"><button type="button" id="cancelPlayerManage" class="button button-quiet">Done</button></div>
+    </div>
+  </dialog>
+  <input id="restoreBackupFile" type="file" accept=".json,application/json" hidden>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
