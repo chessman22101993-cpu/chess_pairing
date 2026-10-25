@@ -1,9 +1,9 @@
-const CACHE_NAME = 'pairing-desk-shell-v3';
+const CACHE_NAME = 'pairing-desk-shell-v4';
 const APP_SHELL = [
   './',
   './index.html',
-  './styles.css?v=3',
-  './app.js?v=3',
+  './styles.css?v=4',
+  './app.js?v=4',
   './manifest.webmanifest',
   './icons/icon-192.png',
   './icons/icon-512.png',
