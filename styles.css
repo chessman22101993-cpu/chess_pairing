@@ -12,3 +12,6 @@
 .standings-hint{margin:-9px 0 12px;padding:0 7px;color:#98a19a;font-size:9px}.result-select{width:145px}.pairing-table{min-width:620px}.pairing-table th:last-child{width:165px}
 @media (max-width:540px){.install-app-button{height:31px;padding:0 9px;font-size:9px}}
 @media (display-mode:standalone) and (max-width:540px){.topbar{height:calc(53px + env(safe-area-inset-top));padding-top:env(safe-area-inset-top);padding-left:max(13px,env(safe-area-inset-left));padding-right:max(13px,env(safe-area-inset-right))}.page-wrap{padding-bottom:calc(23px + env(safe-area-inset-bottom))}}
+.pairing-scroll-hint{display:none}
+@media (max-width:850px){.sidebar{display:none}.main-area{margin-left:0}.topbar{padding-left:20px;padding-right:20px}.page-wrap{padding-left:20px;padding-right:20px}.content-grid,.round-panel,.pairing-table-wrap{min-width:0;max-width:100%}.pairing-table-wrap{-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}}
+@media (max-width:540px){.topbar{padding-left:max(13px,env(safe-area-inset-left));padding-right:max(13px,env(safe-area-inset-right))}.page-wrap{padding-left:12px;padding-right:12px}.pairing-scroll-hint{display:block;margin:0 14px 7px;text-align:right;color:#929b96;font-size:9px}}
