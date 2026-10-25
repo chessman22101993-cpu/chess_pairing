@@ -735,7 +735,7 @@
 
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./service-worker.js').catch((error) => {
+      navigator.serviceWorker.register('./service-worker.js', { updateViaCache: 'none' }).catch((error) => {
         console.warn('Pairing Desk could not enable offline app caching.', error);
       });
     });
