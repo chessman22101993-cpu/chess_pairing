@@ -1,6 +1,6 @@
 # Pairing Desk
 
-A small, local chess tournament manager for in-person games. Open `index.html` in a modern browser to use it; no install, account, server, or network connection is needed for tournament setup, pairings, result entry, standings, and CSV export.
+A small chess tournament manager for in-person games. Open `index.html` in a modern browser, or install the hosted version on a phone as a web app. Tournament setup, pairings, result entry, standings, and CSV export work offline.
 
 ## Use
 
@@ -15,6 +15,17 @@ A small, local chess tournament manager for in-person games. Open `index.html` i
 The app awards 1 point for a win, ½ for a draw, and 0 for a loss. An odd field receives a 1-point bye. Standings use Buchholz for Swiss and Sonneborn–Berger for round robin, then FIDE rating.
 
 Tournament data is saved in the browser's local storage on that device. Clearing browser storage clears the saved tournament, so export the standings when you need a copy.
+
+## Install on a phone
+
+The app can be published for free with GitHub Pages:
+
+1. Open the repository's **Settings → Pages**.
+2. Under **Build and deployment**, select **Deploy from a branch**, choose **`main`** and **`/(root)`**, then save.
+3. After GitHub finishes publishing, visit <https://chessman22101993-cpu.github.io/chess_pairing/> on your phone.
+4. On Android, open Chrome's menu and choose **Install app** or **Add to Home screen**. On iPhone, open the site in Safari, tap **Share → Add to Home Screen**, then tap **Add**.
+
+The hosted app caches its files after the first online visit, so it can open offline afterward. Tournament data remains local to each browser; use **JSON backup** and **Restore backup** to move a tournament between devices. Opening `index.html` directly with a `file://` URL does not enable app installation or service-worker caching.
 
 ## Pairing rules reference
 

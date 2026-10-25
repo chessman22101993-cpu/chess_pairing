@@ -1,0 +1,27 @@
+{
+  "id": "./",
+  "name": "Pairing Desk — Chess Tournament Manager",
+  "short_name": "Pairing Desk",
+  "description": "Offline Swiss and round-robin chess tournament pairings, results, and standings.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#f5f3ee",
+  "background_color": "#f5f3ee",
+  "categories": ["sports", "utilities"],
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -18,6 +18,7 @@
   let state = loadState();
   let toastTimer;
   let managedPlayerId = null;
+  let deferredInstallPrompt = null;
 
   function loadState() {
     try {
@@ -496,7 +497,8 @@
     els.title.textContent = tournament.complete ? 'Final standings' : 'Tournament desk';
     els.subtitle.textContent = tournament.complete ? 'Tournament complete. Review and export the final table.' : 'Record results round by round and track the standings.';
     const canAddLatePlayer = tournament.format === 'swiss' && !tournament.complete && tournament.currentRound + 1 < tournament.totalRounds;
-    els.headingActions.innerHTML = `${canAddLatePlayer ? '<button class="button button-quiet" id="printRoundButton">▤ Print round</button><button class="button button-quiet" id="backupExport">↓ Backup</button><button class="button button-quiet" id="backupImportAction">↑ Restore</button><button class="button button-secondary late-player-action" id="latePlayerAction">＋ Add late player</button>' : '<button class="button button-quiet" id="printRoundButton">▤ Print round</button><button class="button button-quiet" id="backupExport">↓ Backup</button><button class="button button-quiet" id="backupImportAction">↑ Restore</button>'}<button class="button button-quiet" id="newTournament">＋ New tournament</button>`;
+    els.headingActions.innerHTML = `${canAddLatePlayer ? '<button class="button button-quiet" id="printRoundButton">▤ Print round</button><button class="button button-quiet" id="backupExport">↓ Backup</button><button class="button button-quiet" id="backupImportAction">↑ Restore</button><button class="button button-secondary late-player-action" id="latePlayerAction">＋ Add late player</button>' : '<button class="button button-quiet" id="printRoundButton">▤ Print round</button><button class="button button-quiet" id="backupExport">↓ Backup</button><button class="button button-quiet" id="backupImportAction">↑ Restore</button>'}<button class="button button-quiet" id="newTournament">＋ New tournament</button><button class="button button-secondary install-app-button hidden" id="installAppButton" type="button">↓ Install app</button>`;
+    syncInstallButton();
     els.summaryName.textContent = state.name;
     els.summaryFormat.textContent = tournament.format === 'swiss' ? 'SWISS SYSTEM' : 'ROUND ROBIN';
     els.summaryPlayers.textContent = state.players.length;
@@ -511,7 +513,8 @@
     els.tournament.classList.add('hidden');
     els.title.textContent = 'Tournament desk';
     els.subtitle.textContent = 'Set up your field, make pairings, and keep the standings moving.';
-    els.headingActions.innerHTML = '<button class="button button-quiet" id="backupExport">↓ Backup</button><button class="button button-quiet" id="backupImportAction">↑ Restore</button>';
+    els.headingActions.innerHTML = '<button class="button button-quiet" id="backupExport">↓ Backup</button><button class="button button-quiet" id="backupImportAction">↑ Restore</button><button class="button button-secondary install-app-button hidden" id="installAppButton" type="button">↓ Install app</button>';
+    syncInstallButton();
     els.name.value = state.name || '';
     els.roundCount.value = state.roundsPlanned || 5;
     document.querySelector(`input[name="format"][value="${state.format || 'swiss'}"]`).checked = true;
@@ -521,6 +524,10 @@
 
   function render() {
     if (currentTournament()) renderTournament(); else renderSetup();
+  }
+
+  function syncInstallButton() {
+    $('#installAppButton')?.classList.toggle('hidden', !deferredInstallPrompt);
   }
 
   function toast(message) {
@@ -679,6 +686,12 @@
     if (event.target.closest('#printRoundButton')) window.print();
     if (event.target.closest('#backupExport')) exportBackup();
     if (event.target.closest('#backupImportAction')) $('#restoreBackupFile').click();
+    if (event.target.closest('#installAppButton') && deferredInstallPrompt) {
+      const promptEvent = deferredInstallPrompt;
+      deferredInstallPrompt = null;
+      promptEvent.prompt();
+      promptEvent.userChoice.then(syncInstallButton, syncInstallButton);
+    }
   });
   $('#restoreBackupFile').addEventListener('change', (event) => importBackup(event.target.files[0]));
   $('#latePlayerForm').addEventListener('submit', submitLatePlayer);
@@ -689,6 +702,25 @@
   $('#pairingInfoToggle').addEventListener('click', () => { els.info.classList.toggle('hidden'); if (!els.info.classList.contains('hidden')) els.info.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
   $('#closeInfo').addEventListener('click', () => els.info.classList.add('hidden'));
   $('#navTournament').addEventListener('click', () => { if (currentTournament()) window.scrollTo({ top: 0, behavior: 'smooth' }); else render(); });
+
+  window.addEventListener('beforeinstallprompt', (event) => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    syncInstallButton();
+  });
+
+  window.addEventListener('appinstalled', () => {
+    deferredInstallPrompt = null;
+    syncInstallButton();
+  });
+
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js').catch((error) => {
+        console.warn('Pairing Desk could not enable offline app caching.', error);
+      });
+    });
+  }
 
   if (state.tournament) selectedRound = state.tournament.currentRound;
   render();
